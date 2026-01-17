@@ -57,6 +57,7 @@ export interface OrderItem {
   unitPrice: number;
   note: string;
   productId?: string; // Để trừ kho khi bán
+  image?: string; // Ảnh sản phẩm (URL Cloudinary)
 }
 
 export interface Expense {
