@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Nhân Bản Photo-Print Pro",
+  "description": "Hệ thống quản lý đơn hàng photocopy và in ấn thông minh với tính năng nhập liệu bằng giọng nói, quản lý doanh thu và thanh toán QR.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
