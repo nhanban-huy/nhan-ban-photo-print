@@ -1,8 +1,8 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-// Always use { apiKey: process.env.API_KEY } for initialization
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Always use { apiKey: process.env.GEMINI_API_KEY } for initialization
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function parseOrderInput(input: string) {
   // Lấy danh sách preset để nhúng vào prompt
