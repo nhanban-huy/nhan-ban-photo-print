@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import AIAssistant from './AIAssistant';
+import { uploadImage } from '../services/uploadImage';
 import { OrderItem, CustomerInfo, PresetService, InventoryProduct, ProductType } from '../types';
 
 interface OrderFormProps {
@@ -36,6 +37,19 @@ const OrderForm: React.FC<OrderFormProps> = ({ onSave, onCancel, inventory }) =>
   const removeItem = (index: number) => items.length > 1 ? setItems(items.filter((_, i) => i !== index)) : setItems([{ service: '', quantity: 1, unitPrice: 0, note: '' }]);
   
   const updateItemManual = (index: number, field: keyof OrderItem, value: any) => {
+    const handleUploadImage = async (index: number, file: File) => {
+  try {
+    const imageUrl = await uploadImage(file);
+    setItems(prev => {
+      const newItems = [...prev];
+      newItems[index] = { ...newItems[index], image: imageUrl };
+      return newItems;
+    });
+  } catch (err) {
+    alert('Upload ảnh thất bại');
+  }
+};
+
     setItems(prev => {
       const newItems = [...prev];
       newItems[index] = { ...newItems[index], [field]: value };
@@ -227,6 +241,38 @@ const OrderForm: React.FC<OrderFormProps> = ({ onSave, onCancel, inventory }) =>
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
                       <input className="w-full bg-transparent border-none focus:ring-0 p-0 font-black text-slate-200 outline-none" value={item.service} onChange={e => updateItemManual(index, 'service', e.target.value)} required placeholder="Sản phẩm..." />
+                      {/* Upload ảnh sản phẩm */}
+<div className="mt-2 flex items-center gap-3">
+  <label className="cursor-pointer text-[10px] font-black uppercase text-indigo-400 hover:text-indigo-300">
+    📷 Tải ảnh
+    <input
+      type="file"
+      accept="image/*"
+      className="hidden"
+      onChange={async (e) => {
+        if (!e.target.files || !e.target.files[0]) return;
+
+        try {
+          const file = e.target.files[0];
+          const imageUrl = await uploadImage(file);
+
+          updateItemManual(index, 'image', imageUrl);
+        } catch (err) {
+          alert('Upload ảnh thất bại');
+        }
+      }}
+    />
+  </label>
+
+  {item.image && (
+    <img
+      src={item.image}
+      alt="preview"
+      className="w-10 h-10 rounded-lg object-cover border border-slate-700"
+    />
+  )}
+</div>
+
                       {item.productId && <span className="text-[8px] font-black text-indigo-400 uppercase mt-1 tracking-widest">Hàng từ kho</span>}
                     </div>
                   </td>
